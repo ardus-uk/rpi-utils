@@ -7,10 +7,11 @@
 # 2021-10-30
 #
 # Mark Bradley
-# 2022-09-11
+# 2022-09-12
 # Added logging and try - except loop around the ftp operation.
 # 15 sec timeout added to ftp command.
-#
+# Added the script name and build date to the data captured.
+# NOTE This must be updated in this script if and when changes are made.
 # 
 # This script requires the 'dig' command which is part of the
 # dnsutils package. To check if this is installed type dig into
@@ -23,14 +24,13 @@
 # To create the .ipdisclose directory use the following command;
 # mkdir .ipdisclose  NOTE the '.' makes this a hidden directory
 #
-# The script is intended to be invoked by the cron daemon on startup
-# use @reboot with a suitable delay to ensure network connections are in place;
+# The script is intended to be invoked by the cron daemon on startup.
+# Use @reboot with a suitable delay to ensure network connections are in place;
 # for example '@reboot sleep 30 && /home/<your user name>/.ipdisclose/c2.py'
-# use command crontab -e to edit the crontab file.
+# Use command crontab -e to edit the crontab file.
 #
 # The c2.py file must be executable by changing its properties
 # see command chmod
-#
 # 
 #################################################################################
 
@@ -41,6 +41,14 @@ import logging as lg
 
 from time import *
 from ftplib import FTP
+
+# KEEP UP TO DATE
+#################
+# The name of this script
+script = 'c2.py'
+# The build date of this script
+build_date='2022-09-12'
+#################
 
 # Logging configuration - log 'info' and above to file c2.log, fresh file for each run
 lg.basicConfig(level=lg.INFO,filename='c2.log',filemode='w',
@@ -115,10 +123,11 @@ f.write(hostname+"\n")
 f.write(readingDate+"\n")
 f.write(readingTime+"\n")
 f.write(IPaddresses+"\n")
-f.write(extIPaddress)
+f.write(extIPaddress+"\n")
+f.write(script+"("+build_date+")")
 f.truncate()
 f.close()
-lg.info(f'IP data written to file {fpath}')
+lg.info(f'Data written to file {fpath}')
 
 # Send the file to the public webserver
 # Get the credentials
@@ -144,4 +153,4 @@ try:
     lg.info('FTP completed')
     
 except:   # In case of error log it.
-    lg.exception('An Error Occurred!')
+    lg.exception('An error cccurred!')

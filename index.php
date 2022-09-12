@@ -8,8 +8,8 @@
 echo "<p>rpi-utils | ".$_SERVER['SERVER_NAME']." | ".$_SERVER['SERVER_ADDR']."</p>\n";
 echo "<h3>Raspberry Pi IP addresses</h3>\n"; 
 
-$column_colours = ["lightgrey","lightcyan","peachpuff","lightblue","lightgreen","khaki"];
-$column_heads = ["Machine name","Wired","Wireless","Date","Time","Router IP address"];
+$column_colours = ["lightgrey","lightcyan","peachpuff","lightblue","lightgreen","khaki","gold"];
+$column_heads = ["Machine name","Wired","Wireless","Date","Time","Router IP address","Script name (& build date)"];
 $number_of_cols = count($column_colours);
 $col_width = floor(100/$number_of_cols);
 echo '<table style="text-align:center; border="0">';
@@ -36,8 +36,9 @@ foreach ($rpi_files as  $key => $rpi_file) {
                 echo '<td bgcolor= "'.$column_colours[2].'">'.str_replace("wlan0: ","",$fitems[4])."</td>\n";
                 echo '<td bgcolor= "'.$column_colours[3].'">'.$fitems[1]."</td>\n";
                 echo '<td bgcolor= "'.$column_colours[4].'">'.$fitems[2]."</td>\n";
+                # Workround the possibility of an unreported router IP address
                 echo '<td bgcolor= "'.$column_colours[5].'">';
-                if (count($fitems)==6) 
+                if (count($fitems)==$number_of_cols) 
                 {
                     echo($fitems[5]);
                 } 
@@ -46,6 +47,7 @@ foreach ($rpi_files as  $key => $rpi_file) {
                     echo 'not known';
                 };
                 echo "</td>\n";
+                echo '<td bgcolor= "'.$column_colours[6].'">'.$fitems[6]."</td>\n";
                 echo "</tr>\n";
    fclose($fh);
 }
